@@ -1,0 +1,98 @@
+package com.aplicacao.pw.manager.pwmanagerapi.api.controller;
+
+import com.aplicacao.pw.manager.pwmanagerapi.api.http.resources.request.EmployeeRequest;
+import com.aplicacao.pw.manager.pwmanagerapi.api.http.resources.response.EmployeeResponse;
+import com.aplicacao.pw.manager.pwmanagerapi.domain.model.Employee;
+import com.aplicacao.pw.manager.pwmanagerapi.domain.service.EmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping(value = "/employee")
+@Tag(name = "Employee", description = "recursos relacionados ao employee")
+public class EmployeeController {
+
+    private final EmployeeService employeeService;
+
+    private final ModelMapper modelMapper;
+
+
+    public EmployeeController(EmployeeService employeeService, ModelMapper modelMapper) {
+        this.employeeService = employeeService;
+        this.modelMapper = modelMapper;
+    }
+
+
+    @GetMapping
+    @ResponseBody
+    @Operation(description = "Buscar employee sem paginação", summary = "Buscar employee sem paginação")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operação realizada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = EmployeeResponse.class)))
+            ),
+    })
+    public ResponseEntity<?> findAll() {
+        List<Employee> employeesList = employeeService.findAll();
+        List<EmployeeResponse> content = employeesList.stream()
+                .map(item -> modelMapper.map(item, EmployeeResponse.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(content);
+    }
+
+
+    @DeleteMapping("/{id}")
+    @Operation(description = "Deleta uma alocação", summary = "Deleta uma alocação")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Alocação deletada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Alocação não encontrada")
+    })
+    public ResponseEntity<List<EmployeeResponse>> delete(@Parameter(description = "Id do employee", required = true)
+                                                              @PathVariable(name = "id") Long id) {
+        employeeService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping
+    @Operation(description = "Criar employee", summary = "Criar employee")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Operação realizada com sucesso",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = EmployeeResponse.class))}),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida")
+    })
+    public ResponseEntity<EmployeeResponse> createEmployee(@RequestBody @Valid EmployeeRequest employeeRequest,
+                                                           UriComponentsBuilder uriBuilder) {
+        Employee employee = modelMapper.map(employeeRequest, Employee.class);
+
+        // Se employeeSuperiorId não for nulo, atribua o Employee correspondente
+        if (employeeRequest.getEmployeeSuperior() != null) {
+            Employee superior = employeeService.findById(employeeRequest.getEmployeeSuperior());
+            employee.setEmployeeSuperior(superior);
+        }
+
+        Employee employeeSaved = employeeService.create(employee);
+
+        URI uri = uriBuilder.path("/employee/{id}")
+                .buildAndExpand(employeeSaved.getId())
+                .toUri();
+
+        EmployeeResponse employeeResponse = modelMapper.map(employeeSaved, EmployeeResponse.class);
+        return ResponseEntity.created(uri).body(employeeResponse);
+    }
+
+
+}
