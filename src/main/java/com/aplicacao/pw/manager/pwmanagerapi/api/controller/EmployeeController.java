@@ -56,10 +56,10 @@ public class EmployeeController {
 
 
     @DeleteMapping("/{id}")
-    @Operation(description = "Deleta uma alocação", summary = "Deleta uma alocação")
+    @Operation(description = "Deleta um employee", summary = "Deleta um employee")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Alocação deletada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Alocação não encontrada")
+            @ApiResponse(responseCode = "204", description = "Employee deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Employee não encontrado")
     })
     public ResponseEntity<List<EmployeeResponse>> delete(@Parameter(description = "Id do employee", required = true)
                                                               @PathVariable(name = "id") Long id) {
@@ -94,5 +94,21 @@ public class EmployeeController {
         return ResponseEntity.created(uri).body(employeeResponse);
     }
 
+
+    @PutMapping(value = "/{id}")
+    @Operation(description = "Editar Employee", summary = "Editar Employee")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operação realizada com sucesso",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = EmployeeResponse.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
+    public ResponseEntity<EmployeeResponse> update(@Parameter(description = "Id employee", required = true)
+                                                                            @PathVariable(name = "id") Long id,
+                                                          @RequestBody EmployeeRequest employeeRequest) {
+        Employee employee = modelMapper.map(employeeRequest, Employee.class);
+        Employee update = employeeService.update(id, employee);
+        EmployeeResponse employeeResponse = modelMapper.map(update, EmployeeResponse.class);
+        return ResponseEntity.ok(employeeResponse);
+    }
 
 }

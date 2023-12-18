@@ -4,6 +4,9 @@ import com.aplicacao.pw.manager.pwmanagerapi.domain.Repository.EmployeeRepositor
 import com.aplicacao.pw.manager.pwmanagerapi.domain.exception.NotFoundException;
 import com.aplicacao.pw.manager.pwmanagerapi.domain.model.Employee;
 import jakarta.transaction.Transactional;
+import org.modelmapper.Conditions;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,5 +43,18 @@ public class EmployeeServiceImpl implements EmployeeService{
     public void delete(Long id) {
         Employee employee = findById(id);
         employeeRepository.delete(employee);
+    }
+
+    @Override
+    public Employee update(Long id, Employee employee) {
+
+        Employee employeeFind = findById(id);
+
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+
+        mapper.map(employee, employeeFind);
+
+        return employeeRepository.save(employeeFind);
     }
 }
