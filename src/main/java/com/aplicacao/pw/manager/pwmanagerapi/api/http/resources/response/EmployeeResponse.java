@@ -27,6 +27,9 @@ public class EmployeeResponse {
     @Schema(description = "employee superior")
     private Long employeeSuperiorId;
 
+    @Schema(description = "score")
+    private Long score;
+
     @Schema(description = "employee superior")
     private List<EmployeeResponse> subordinados;
 }

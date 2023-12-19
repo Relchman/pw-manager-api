@@ -17,14 +17,17 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 
     private final EmployeeRepository employeeRepository;
+    private final PasswordService passwordService;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, PasswordService passwordService) {
         this.employeeRepository = employeeRepository;
+        this.passwordService = passwordService;
     }
 
     @Override
     @Transactional
     public Employee create(Employee employee) {
+        employee.setScore(passwordService.calculatePasswordScore(employee.getPassword()));
         return employeeRepository.save(employee);
     }
 
@@ -49,6 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     public Employee update(Long id, Employee employee) {
 
         Employee employeeFind = findById(id);
+        employee.setScore(passwordService.calculatePasswordScore(employee.getPassword()));
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());

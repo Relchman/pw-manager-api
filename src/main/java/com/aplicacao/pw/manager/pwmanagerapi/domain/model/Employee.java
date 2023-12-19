@@ -26,6 +26,9 @@ public class Employee {
     @Column(name = "PASSWORD", nullable = false)
     private String password;
 
+    @Column(name = "SCORE")
+    private Long score;
+
     @ManyToOne
     @JoinColumn(name = "ID_SUPERIOR")
     private Employee employeeSuperior;
@@ -37,6 +40,7 @@ public class Employee {
         return EmployeeResponse.builder()
                 .id(id)
                 .name(name)
+                .score(score)
                 .employeeSuperiorId(employeeSuperior != null ? employeeSuperior.getId() : null)
                 .subordinados(subordinados != null ? subordinados.stream().map(Employee::toDTO).toList() : null)
                 .build();
