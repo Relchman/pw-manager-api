@@ -106,6 +106,11 @@ public class EmployeeController {
                                                                             @PathVariable(name = "id") Long id,
                                                           @RequestBody EmployeeRequest employeeRequest) {
         Employee employee = modelMapper.map(employeeRequest, Employee.class);
+        // Se employeeSuperiorId não for nulo, atribua o Employee correspondente
+        if (employeeRequest.getEmployeeSuperior() != null) {
+            Employee superior = employeeService.findById(employeeRequest.getEmployeeSuperior());
+            employee.setEmployeeSuperior(superior);
+        }
         Employee update = employeeService.update(id, employee);
         EmployeeResponse employeeResponse = modelMapper.map(update, EmployeeResponse.class);
         return ResponseEntity.ok(employeeResponse);
