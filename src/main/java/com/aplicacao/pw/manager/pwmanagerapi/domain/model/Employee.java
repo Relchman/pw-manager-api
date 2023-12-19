@@ -41,7 +41,7 @@ public class Employee {
                 .subordinados(subordinados != null ? subordinados.stream().map(Employee::toDTO).toList() : null)
                 .build();
     }
-    private EmployeeResponse toDTOWithoutSubordinados() {
+    public EmployeeResponse toDTOWithoutSubordinados() {
         return EmployeeResponse.builder()
                 .id(id)
                 .name(name)

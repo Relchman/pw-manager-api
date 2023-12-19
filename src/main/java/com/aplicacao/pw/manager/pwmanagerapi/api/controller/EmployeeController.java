@@ -89,7 +89,7 @@ public class EmployeeController {
                 .buildAndExpand(employeeSaved.getId())
                 .toUri();
 
-        EmployeeResponse employeeResponse = modelMapper.map(employeeSaved, EmployeeResponse.class);
+        EmployeeResponse employeeResponse = employeeSaved.toDTOWithoutSubordinados(); // Usando o método ajustado
         return ResponseEntity.created(uri).body(employeeResponse);
     }
 
@@ -111,7 +111,7 @@ public class EmployeeController {
             employee.setEmployeeSuperior(superior);
         }
         Employee update = employeeService.update(id, employee);
-        EmployeeResponse employeeResponse = modelMapper.map(update, EmployeeResponse.class);
+        EmployeeResponse employeeResponse = update.toDTOWithoutSubordinados(); // Usando o método ajustado
         return ResponseEntity.ok(employeeResponse);
     }
 
