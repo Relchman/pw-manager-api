@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/employee")
 @Tag(name = "Employee", description = "recursos relacionados ao employee")
+@CrossOrigin(origins = "*")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
@@ -38,7 +39,7 @@ public class EmployeeController {
     }
 
 
-   @GetMapping
+    @GetMapping
     @ResponseBody
     @Operation(description = "Buscar employee sem paginação", summary = "Buscar employee sem paginação")
     @ApiResponses(value = {
