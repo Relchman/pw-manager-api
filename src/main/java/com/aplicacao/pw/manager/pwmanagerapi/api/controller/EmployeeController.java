@@ -38,7 +38,7 @@ public class EmployeeController {
     }
 
 
-    @GetMapping
+   @GetMapping
     @ResponseBody
     @Operation(description = "Buscar employee sem paginação", summary = "Buscar employee sem paginação")
     @ApiResponses(value = {
@@ -46,14 +46,13 @@ public class EmployeeController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = EmployeeResponse.class)))
             ),
     })
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<List<EmployeeResponse>> findAll() {
         List<Employee> employeesList = employeeService.findAll();
         List<EmployeeResponse> content = employeesList.stream()
-                .map(item -> modelMapper.map(item, EmployeeResponse.class))
+                .map(Employee::toDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(content);
     }
-
 
     @DeleteMapping("/{id}")
     @Operation(description = "Deleta um employee", summary = "Deleta um employee")

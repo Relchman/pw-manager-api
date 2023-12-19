@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -24,4 +26,7 @@ public class EmployeeResponse {
 
     @Schema(description = "employee superior")
     private Employee employeeSuperior;
+
+    @Schema(description = "employee superior")
+    private List<EmployeeResponse> subordinados;
 }

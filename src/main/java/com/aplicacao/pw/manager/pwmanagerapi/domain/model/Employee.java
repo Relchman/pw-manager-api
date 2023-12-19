@@ -1,7 +1,10 @@
 package com.aplicacao.pw.manager.pwmanagerapi.domain.model;
 
+import com.aplicacao.pw.manager.pwmanagerapi.api.http.resources.response.EmployeeResponse;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 
 @Data
@@ -27,4 +30,21 @@ public class Employee {
     @JoinColumn(name = "ID_SUPERIOR")
     private Employee employeeSuperior;
 
+    @OneToMany(mappedBy = "employeeSuperior")
+    private List<Employee> subordinados;
+
+    public EmployeeResponse toDTO() {
+        return EmployeeResponse.builder()
+                .id(id)
+                .name(name)
+                .employeeSuperior(employeeSuperior != null ? employeeSuperior.toDTOWithoutSubordinados().getEmployeeSuperior() : null)
+                .subordinados(subordinados != null ? subordinados.stream().map(Employee::toDTO).toList() : null)
+                .build();
+    }
+    private EmployeeResponse toDTOWithoutSubordinados() {
+        return EmployeeResponse.builder()
+                .id(id)
+                .name(name)
+                .build();
+    }
 }
