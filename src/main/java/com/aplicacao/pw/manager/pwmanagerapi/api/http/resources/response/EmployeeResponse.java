@@ -25,7 +25,7 @@ public class EmployeeResponse {
     private String name;
 
     @Schema(description = "employee superior")
-    private Employee employeeSuperior;
+    private Long employeeSuperiorId;
 
     @Schema(description = "employee superior")
     private List<EmployeeResponse> subordinados;

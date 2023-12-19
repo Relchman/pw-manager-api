@@ -37,7 +37,7 @@ public class Employee {
         return EmployeeResponse.builder()
                 .id(id)
                 .name(name)
-                .employeeSuperior(employeeSuperior != null ? employeeSuperior.toDTOWithoutSubordinados().getEmployeeSuperior() : null)
+                .employeeSuperiorId(employeeSuperior != null ? employeeSuperior.getId() : null)
                 .subordinados(subordinados != null ? subordinados.stream().map(Employee::toDTO).toList() : null)
                 .build();
     }
