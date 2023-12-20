@@ -6,8 +6,13 @@ import org.springframework.stereotype.Service;
 public class PasswordServiceImpl implements PasswordService {
 
     @Override
+    public Long calculatePasswordScore(String password) {
+        return 1l;
+    }
+
+    @Override
     public String test() {
-        return "success";
+        return "Sucess";
     }
 
     public boolean checkMinimunRequirements(String password) {

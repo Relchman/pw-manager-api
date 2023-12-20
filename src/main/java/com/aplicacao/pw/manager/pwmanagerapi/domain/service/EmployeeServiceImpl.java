@@ -58,4 +58,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         return employeeRepository.save(employeeModel);
     }
+
+    @Override
+    public List<Employee> findByEmployeeSuperiorIsNull() {
+        return employeeRepository.findByEmployeeSuperiorIsNull();
+    }
 }

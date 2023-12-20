@@ -55,6 +55,22 @@ public class EmployeeController {
         return ResponseEntity.ok(content);
     }
 
+    @GetMapping("/findByEmployeeSuperiorIsNull")
+    @ResponseBody
+    @Operation(description = "Buscar employee sem paginação com inicio em um employee sem employeeSuperior", summary = "Buscar employee sem paginação com inicio em um employee sem employeeSuperior")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operação realizada com sucesso",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = EmployeeResponse.class)))
+            ),
+    })
+    public ResponseEntity<List<EmployeeResponse>> findByEmployeeSuperiorIsNull() {
+        List<Employee> employeesList = employeeService.findByEmployeeSuperiorIsNull();
+        List<EmployeeResponse> content = employeesList.stream()
+                .map(Employee::toDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(content);
+    }
+
     @DeleteMapping("/{id}")
     @Operation(description = "Deleta um employee", summary = "Deleta um employee")
     @ApiResponses(value = {
