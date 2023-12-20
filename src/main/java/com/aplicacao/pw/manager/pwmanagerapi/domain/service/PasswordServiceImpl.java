@@ -9,16 +9,12 @@ import org.springframework.stereotype.Service;
 public class PasswordServiceImpl implements PasswordService {
 
     @Override
-    public Long calculatePasswordScore(String password) {
-        return 1l;
-    }
-
-    @Override
     public String test() {
         return "Sucess";
     }
 
-    public Long calcAdditionsScore(String password) {
+    @Override
+    public Long calculatePasswordScore(String password) {
         Long score = calcNumberOfCharacters(password) + calcUppercaseLetters(password)
                 + calcLowercaseLetters(password) + calcNumbers(password) + calcSymbols(password)
                 + calcMiddleNumberOrSymbol(password) + calcRequirements(password);
