@@ -49,19 +49,6 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public Employee update(Long id, Employee employee) {
-        Employee employeeModel = findById(id);
-        String hashedPassword = PasswordHashing.hashPassword(employee.getPassword());
-        employee.setPassword(hashedPassword);
-        employeeModel.setName(employee.getName());
-        employeeModel.setScore(passwordService.calculatePasswordScore(employee.getPassword()));
-        employeeModel.setPassword(employee.getPassword());
-        employeeModel.setEmployeeSuperior(employee.getEmployeeSuperior());
-
-        return employeeRepository.save(employeeModel);
-    }
-
-    @Override
     public List<Employee> findByEmployeeSuperiorIsNull() {
         return employeeRepository.findByEmployeeSuperiorIsNull();
     }

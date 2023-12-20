@@ -107,27 +107,6 @@ public class EmployeeController {
         return ResponseEntity.created(uri).body(employeeResponse);
     }
 
-    @PutMapping(value = "/{id}")
-    @Operation(description = "Editar Employee", summary = "Editar Employee")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Operação realizada com sucesso",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = EmployeeResponse.class))}),
-            @ApiResponse(responseCode = "400", description = "Bad request")
-    })
-    public ResponseEntity<EmployeeResponse> update(@Parameter(description = "Id employee", required = true)
-                                                                            @PathVariable(name = "id") Long id,
-                                                          @RequestBody EmployeeRequest employeeRequest) {
-        Employee employee = modelMapper.map(employeeRequest, Employee.class);
-
-        // Atribui o superior
-        assignEmployeeSuperior(employeeRequest.getEmployeeSuperior(), employee);
-
-        Employee update = employeeService.update(id, employee);
-        EmployeeResponse employeeResponse = update.toDTOWithoutSubordinados(); // Usando o método ajustado
-        return ResponseEntity.ok(employeeResponse);
-    }
-
-
     // Método para atribuir o superior se employeeSuperiorId não for 0 ou nulo
     private void assignEmployeeSuperior(Long employeeSuperiorId, Employee employee) {
         if (employeeSuperiorId != null && employeeSuperiorId != 0) {
