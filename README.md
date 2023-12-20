@@ -29,6 +29,9 @@ Conforme proposto no desafio, a aplicação segue os padrões solicitados
 * [MySql]
 * [Flyway]
 * [Argon2]
+* [regex]
+* [mockito]
+* [JUnit]
 
 
 ## ✒️ Autor
