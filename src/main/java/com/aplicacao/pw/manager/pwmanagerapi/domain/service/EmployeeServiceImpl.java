@@ -1,5 +1,6 @@
 package com.aplicacao.pw.manager.pwmanagerapi.domain.service;
 
+import com.aplicacao.pw.manager.pwmanagerapi.core.PasswordHashing;
 import com.aplicacao.pw.manager.pwmanagerapi.domain.Repository.EmployeeRepository;
 import com.aplicacao.pw.manager.pwmanagerapi.domain.exception.NotFoundException;
 import com.aplicacao.pw.manager.pwmanagerapi.domain.model.Employee;
@@ -27,6 +28,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     @Transactional
     public Employee create(Employee employee) {
+        String hashedPassword = PasswordHashing.hashPassword(employee.getPassword());
+        employee.setPassword(hashedPassword);
         employee.setScore(passwordService.calculatePasswordScore(employee.getPassword()));
         return employeeRepository.save(employee);
     }
@@ -51,6 +54,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public Employee update(Long id, Employee employee) {
         Employee employeeModel = findById(id);
+        String hashedPassword = PasswordHashing.hashPassword(employee.getPassword());
+        employee.setPassword(hashedPassword);
         employeeModel.setName(employee.getName());
         employeeModel.setScore(passwordService.calculatePasswordScore(employee.getPassword()));
         employeeModel.setPassword(employee.getPassword());
