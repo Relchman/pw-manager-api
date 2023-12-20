@@ -103,7 +103,7 @@ public class EmployeeController {
                 .buildAndExpand(employeeSaved.getId())
                 .toUri();
 
-        EmployeeResponse employeeResponse = employeeSaved.toDTOWithoutSubordinados(); // Usando o método ajustado
+        EmployeeResponse employeeResponse = employeeSaved.toDTO(); // Usando o método ajustado
         return ResponseEntity.created(uri).body(employeeResponse);
     }
 
