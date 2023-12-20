@@ -50,15 +50,12 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public Employee update(Long id, Employee employee) {
+        Employee employeeModel = findById(id);
+        employeeModel.setName(employee.getName());
+        employeeModel.setScore(passwordService.calculatePasswordScore(employee.getPassword()));
+        employeeModel.setPassword(employee.getPassword());
+        employeeModel.setEmployeeSuperior(employee.getEmployeeSuperior());
 
-        Employee employeeFind = findById(id);
-        employee.setScore(passwordService.calculatePasswordScore(employee.getPassword()));
-
-        ModelMapper mapper = new ModelMapper();
-        mapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
-
-        mapper.map(employee, employeeFind);
-
-        return employeeRepository.save(employeeFind);
+        return employeeRepository.save(employeeModel);
     }
 }
