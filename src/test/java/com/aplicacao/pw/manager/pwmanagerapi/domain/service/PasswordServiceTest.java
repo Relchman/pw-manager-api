@@ -404,4 +404,17 @@ class PasswordServiceTest {
         assertEquals(8L, score3);
         assertEquals(10L, score4);
     }
+
+
+    @Test
+    public void givenPassword_whenCalcAdditionsScore_thenReturnValue() {
+        // given password
+        String password1 = "2!EgAbG5#";
+
+        // when calcLowercaseLetters
+        Long score1 = passwordService.calculatePasswordScore(password1);
+
+        // then return correct value
+        assertEquals(96L, score1);
+    }
 }
