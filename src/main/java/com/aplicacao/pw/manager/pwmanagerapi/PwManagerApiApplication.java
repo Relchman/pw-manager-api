@@ -12,8 +12,4 @@ public class PwManagerApiApplication {
 		SpringApplication.run(PwManagerApiApplication.class, args);
 	}
 
-	@Bean
-	public ModelMapper modelMapper() {
-		return new ModelMapper();
-	}
 }
