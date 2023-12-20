@@ -26,8 +26,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Transactional
     public Employee create(Employee employee) {
         String hashedPassword = PasswordHashing.hashPassword(employee.getPassword());
-        employee.setPassword(hashedPassword);
         employee.setScore(passwordService.calculatePasswordScore(employee.getPassword()));
+        employee.setPassword(hashedPassword);
         return employeeRepository.save(employee);
     }
 
