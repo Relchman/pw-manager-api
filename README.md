@@ -17,7 +17,7 @@ Frontend [pw-manager-fe] (https://github.com/Relchman/pw-manager-fe)
 
 ```
 
-## 📦 Implantação
+## 📦 Implementação
 
 Conforme proposto no desafio, a aplicação segue os padrões solicitados
 
