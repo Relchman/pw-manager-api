@@ -1,13 +1,10 @@
 package com.aplicacao.pw.manager.pwmanagerapi.domain.service;
 
-import com.aplicacao.pw.manager.pwmanagerapi.core.PasswordHashing;
+import com.aplicacao.pw.manager.pwmanagerapi.core.config.PasswordHashing;
 import com.aplicacao.pw.manager.pwmanagerapi.domain.Repository.EmployeeRepository;
 import com.aplicacao.pw.manager.pwmanagerapi.domain.exception.NotFoundException;
 import com.aplicacao.pw.manager.pwmanagerapi.domain.model.Employee;
 import jakarta.transaction.Transactional;
-import org.modelmapper.Conditions;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

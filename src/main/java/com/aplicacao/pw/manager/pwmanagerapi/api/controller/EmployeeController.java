@@ -94,11 +94,8 @@ public class EmployeeController {
                                                            UriComponentsBuilder uriBuilder) {
         Employee employee = modelMapper.map(employeeRequest, Employee.class);
 
-        // Se employeeSuperiorId não for nulo, atribua o Employee correspondente
-        if (employeeRequest.getEmployeeSuperior() != null) {
-            Employee superior = employeeService.findById(employeeRequest.getEmployeeSuperior());
-            employee.setEmployeeSuperior(superior);
-        }
+        // Atribui o superior
+        assignEmployeeSuperior(employeeRequest.getEmployeeSuperior(), employee);
 
         Employee employeeSaved = employeeService.create(employee);
 
@@ -109,7 +106,6 @@ public class EmployeeController {
         EmployeeResponse employeeResponse = employeeSaved.toDTOWithoutSubordinados(); // Usando o método ajustado
         return ResponseEntity.created(uri).body(employeeResponse);
     }
-
 
     @PutMapping(value = "/{id}")
     @Operation(description = "Editar Employee", summary = "Editar Employee")
@@ -122,14 +118,23 @@ public class EmployeeController {
                                                                             @PathVariable(name = "id") Long id,
                                                           @RequestBody EmployeeRequest employeeRequest) {
         Employee employee = modelMapper.map(employeeRequest, Employee.class);
-        // Se employeeSuperiorId não for nulo, atribua o Employee correspondente
-        if (employeeRequest.getEmployeeSuperior() != null) {
-            Employee superior = employeeService.findById(employeeRequest.getEmployeeSuperior());
-            employee.setEmployeeSuperior(superior);
-        }
+
+        // Atribui o superior
+        assignEmployeeSuperior(employeeRequest.getEmployeeSuperior(), employee);
+
         Employee update = employeeService.update(id, employee);
         EmployeeResponse employeeResponse = update.toDTOWithoutSubordinados(); // Usando o método ajustado
         return ResponseEntity.ok(employeeResponse);
     }
 
+
+    // Método para atribuir o superior se employeeSuperiorId não for 0 ou nulo
+    private void assignEmployeeSuperior(Long employeeSuperiorId, Employee employee) {
+        if (employeeSuperiorId != null && employeeSuperiorId != 0) {
+            Employee superior = employeeService.findById(employeeSuperiorId);
+            employee.setEmployeeSuperior(superior);
+        } else {
+            employee.setEmployeeSuperior(null);
+        }
+    }
 }

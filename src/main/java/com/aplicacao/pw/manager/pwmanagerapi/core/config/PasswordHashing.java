@@ -1,4 +1,4 @@
-package com.aplicacao.pw.manager.pwmanagerapi.core;
+package com.aplicacao.pw.manager.pwmanagerapi.core.config;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 
